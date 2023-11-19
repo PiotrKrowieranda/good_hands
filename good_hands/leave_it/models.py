@@ -46,12 +46,13 @@ class CustomUser(AbstractUser):
 
     # Ustawienie pola e-mail jako nazwy użytkownika (logowanie)
     USERNAME_FIELD = 'email'
+    # Pole USERNAME_FIELD decyduje o tym, które pole będzie wykorzystywane jako nazwa użytkownika podczas logowania. W twoim przypadku, email zostało wybrane jako unikalne pole, które będzie używane jako nazwa użytkownika.
 
     # Lista pól wymaganych podczas tworzenia użytkownika moża dodać np telefon ale teraz jest puste - żadne dodatkowe pola nie są wymagane podczas tworzenia użytkownika.
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.email  # Reprezentacja obiektu jako ciąg znaków
+        return self.email
 
 
 class Category(models.Model):
@@ -92,3 +93,6 @@ class Donation(models.Model):
 
     def __str__(self):
         return f'Donation #{self.id} - {self.quantity} bags'  # Reprezentacja obiektu jako ciąg znaków
+
+
+

@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from leave_it.views import LoginView, LandingPageView, AddDonationView, RegisterView, LogoutView, ResetPasswordView
+from leave_it.views import LoginView, LandingPageView, AddDonationView, RegisterView, LogoutView, ResetPasswordView, GetInstitutionsView
 
 
 urlpatterns = [
@@ -29,6 +29,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('reset/', ResetPasswordView.as_view(), name='reset'),
+    path('api/institutions/', GetInstitutionsView.as_view(), name='get_institutions'),
 ]
 
 if settings.DEBUG:
