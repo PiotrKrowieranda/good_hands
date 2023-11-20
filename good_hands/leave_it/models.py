@@ -24,31 +24,19 @@ class CustomUserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, email, password, **extra_fields):
-        # Tworzenie superużytkownika
-        """Metoda setdefault to metoda słownika . Służy do pobierania wartości danego klucza z słownika.
-         Jeśli klucz nie istnieje, setdefault dodaje klucz do słownika z podaną wartością domyślną."""
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
-        #Jeśli w słowniku extra_fields nie istnieje klucz 'is_staff' lub 'is_superuser', to metoda setdefault doda te klucze do słownika
-        # i ustawi ich wartość na True. Jeśli klucze te już istnieją,
-        # to metoda nie wprowadzi żadnych zmian. W ten sposób zapewniamy, że atrybuty 'is_staff' i 'is_superuser'
-        # są dostępne w słowniku extra_fields i mają domyślne wartości True, jeśli nie są już ustawione.
 
 # Niestandardowy model użytkownika
 class CustomUser(AbstractUser):
     # Dodanie pola e-mail jako unikalnego
     email = models.EmailField(unique=True)
-
+    username = None
     # Ustawienie managera
     objects = CustomUserManager()
-
     # Ustawienie pola e-mail jako nazwy użytkownika (logowanie)
     USERNAME_FIELD = 'email'
-    # Pole USERNAME_FIELD decyduje o tym, które pole będzie wykorzystywane jako nazwa użytkownika podczas logowania. W twoim przypadku, email zostało wybrane jako unikalne pole, które będzie używane jako nazwa użytkownika.
+    # Pole USERNAME_FIELD decyduje o tym, które pole będzie wykorzystywane jako nazwa użytkownika podczas logowania.
 
-    # Lista pól wymaganych podczas tworzenia użytkownika moża dodać np telefon ale teraz jest puste - żadne dodatkowe pola nie są wymagane podczas tworzenia użytkownika.
+    # Lista pól wymaganych podczas tworzenia użytkownika moża dodać np telefon ale teraz jest puste - żadne .
     REQUIRED_FIELDS = []
 
     def __str__(self):

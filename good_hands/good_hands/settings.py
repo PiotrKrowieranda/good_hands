@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+# from leave_it.backend import CustomEmailAuthBackend
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'leave_it.backends',
     'leave_it',
     'django_extensions',
 ]
@@ -79,7 +80,7 @@ DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'trial06',
+        'NAME': 'trial07',
         'USER': 'postgres',
         'PASSWORD': 'coderslab',
     }
@@ -137,6 +138,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Ustawienia niestandardowego modelu użytkownika
 AUTH_USER_MODEL = 'leave_it.CustomUser'
 AUTHENTICATION_BACKENDS = [
-    # 'leave_it.backends.CustomUserBackend',
+    # 'leave_it.backends.CustomEmailAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
