@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'leave_it.backends',
+
     'leave_it',
     'django_extensions',
 ]
@@ -80,7 +80,7 @@ DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'trial07',
+        'NAME': 'trial11',
         'USER': 'postgres',
         'PASSWORD': 'coderslab',
     }
@@ -137,7 +137,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Ustawienia niestandardowego modelu użytkownika
 AUTH_USER_MODEL = 'leave_it.CustomUser'
+
 AUTHENTICATION_BACKENDS = [
-    # 'leave_it.backends.CustomEmailAuthBackend',
+    # 'leave_it.models.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]

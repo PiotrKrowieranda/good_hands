@@ -2,41 +2,35 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.models import User
 from django.conf import settings
+import logging
 
 # Manager niestandardowego użytkownika
-class CustomUserManager(BaseUserManager):
+class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
-        # Sprawdź, czy podano adres e-mail
+        # Tworzenie użytkownika z polem 'email' jako unikalnym identyfikatorem
         if not email:
-            raise ValueError("Pole Email musi być wypełnione")
-
-        # Znormalizuj adres e-mail
-        email = self.normalize_email(email)
-
-        # Stwórz nowego użytkownika
-        user = self.model(email=email, username=email, **extra_fields)
-
-        # Sprawdź, czy podano hasło
-        if not password:
-            raise ValueError("Pole hasło musi być wypełnione")
-
-        user.set_password(password)  # Ustawienie hasła użytkownika
+            raise ValueError("Email musi być ustawiony.")
+        print(f"Tworzenie użytkownika: {email}")
+        print(f"Hasło: {password}")
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
         user.save()
+        print("Użytkownik został utworzony")
         return user
 
 
-# Niestandardowy model użytkownika
 class CustomUser(AbstractUser):
-    # Dodanie pola e-mail jako unikalnego
-    email = models.EmailField(unique=True)
-    username = None
-    # Ustawienie managera
-    objects = CustomUserManager()
-    # Ustawienie pola e-mail jako nazwy użytkownika (logowanie)
-    USERNAME_FIELD = 'email'
-    # Pole USERNAME_FIELD decyduje o tym, które pole będzie wykorzystywane jako nazwa użytkownika podczas logowania.
 
-    # Lista pól wymaganych podczas tworzenia użytkownika moża dodać np telefon ale teraz jest puste - żadne .
+    username = None
+    # Dodaj pole 'email' jako unikalny identyfikator
+    email = models.EmailField(unique=True)
+
+    # Ustaw niestandardowy manager
+    objects = UserManager()
+
+    # Ustaw 'email' jako pole identyfikujące użytkownika
+    USERNAME_FIELD = 'email'
+
     REQUIRED_FIELDS = []
 
     def __str__(self):

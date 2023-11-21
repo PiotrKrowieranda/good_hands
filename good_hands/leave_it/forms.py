@@ -1,6 +1,9 @@
 from django import forms
 from .models import CustomUser
 
+from django import forms
+from .models import CustomUser
+
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password_confirm = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -29,6 +32,24 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Hasła nie są identyczne.")
         if not password or not password_confirm:
             raise forms.ValidationError("Pola z hasłem są wymagane.")
+
+    def save(self):
+        user = super().save()
+        password = self.cleaned_data['password']
+        user.set_password(password)
+        user.save()
+        return user
+
+    #
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     password = self.cleaned_data['password']
+    #     user.set_password(password)
+    #     if commit:
+    #         user.save()
+    #     return user
+
+
 
 
 class LoginForm(forms.Form):

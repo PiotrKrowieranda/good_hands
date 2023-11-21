@@ -53,13 +53,15 @@ class LoginView(View):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
-
+            print(user)
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Użytkownik został pomyślnie zalogowany')
                 return redirect('index')
+            else:
+                messages.error(request, 'Nieprawidłowy adres email lub hasło.')
 
-        messages.error(request, 'Nieprawidłowe dane logowania.')
+
         return render(request, "login-form.html", {'form': form})
 
 # BEZ FORMULARZA
