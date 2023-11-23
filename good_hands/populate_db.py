@@ -12,21 +12,21 @@ zbiorka_category, _ = Category.objects.get_or_create(name="Zbiórka lokalna")
 inst1 = Institution.objects.create(
     name="Fundacja 'Lorem Ipsum 1'",
     description="Cel i misja: Pomoc dla potrzebujących.",
-    type="fundacja",
+    type="jedzenie, ubrania"
 )
 inst1.categories.set([fundacja_category])
 
 inst2 = Institution.objects.create(
     name="Organizacja 'Lorem Ipsum 2'",
     description="Cel i misja: Pomoc dla osób chorych.",
-    type="organizacja",
+    type="jedzenie, ubrania",
 )
 inst2.categories.set([organizacja_category])
 
 inst3 = Institution.objects.create(
     name="Zbiórka 'Lorem Ipsum 3'",
     description="Cel i misja: Pomoc dla zwierząt.",
-    type="zbiórka",
+    type="jedzenie, ubrania"
 )
 inst3.categories.set([zbiorka_category])
 
@@ -211,4 +211,44 @@ for category in categories:
     # Pobieramy instytucje przypisane do tej kategorii
     institutions = category.institution_set.all()
     for institution in institutions:
-        print(f"    Instytucja: {institution.name}")
+        print(f"    Instytucja: {institution.name} ")
+
+
+#stworzenie donacji o ilości 5 i przypisznie do każdej instytucji
+
+from leave_it.models import Institution, Donation
+from django.utils import timezone
+
+# Pobieramy instytucje
+institutions = Institution.objects.all()
+
+# Tworzymy donacje i przypisujemy im datę i czas
+for institution in institutions:
+    Donation.objects.create(
+        quantity=5,
+        institution=institution,
+        pick_up_date=timezone.now().date(),  # Ustawiamy datę bieżącą
+        pick_up_time=timezone.now().time()   # Ustawiamy czas bieżący
+    )
+
+
+# sprawdzenie datków
+
+from leave_it.models import Donation
+
+# Pobieramy wszystkie donacje wraz z informacją o instytucjach
+donations = Donation.objects.all()
+
+# Iterujemy przez donacje
+for donation in donations:
+    print(f"Donacja ID: {donation.id}")
+    print(f"Ilość: {donation.quantity}")
+    print(f"Instytucja: {donation.institution.name}")  # Zakładając, że nazwa instytucji jest przechowywana w polu 'name'
+    print(f"Adres: {donation.address}")
+    print(f"Numer telefonu: {donation.phone_number}")
+    print(f"Miasto: {donation.city}")
+    print(f"Kod pocztowy: {donation.zip_code}")
+    print(f"Data odbioru: {donation.pick_up_date}")
+    print(f"Czas odbioru: {donation.pick_up_time}")
+    print(f"Komentarz: {donation.pick_up_comment}")
+    print("----------------------------------------")

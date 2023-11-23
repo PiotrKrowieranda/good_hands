@@ -1,7 +1,70 @@
+
+
 document.addEventListener("DOMContentLoaded", function() {
     /**
      * HomePage - Help section
      */
+
+
+
+// Znajdź wszystkie przyciski "Dalej" z klasą .btn i .next-step
+const nextButtons = document.querySelectorAll('.btn.next-step');
+
+// Znajdź wszystkie przyciski "Wstecz" z klasą .btn i .prev-step
+const prevButtons = document.querySelectorAll('.btn.prev-step');
+
+// Funkcja przechodzenia do następnego kroku
+function nextStep(stepId) {
+  // Pobierz aktualny krok i następny krok na podstawie identyfikatora
+  const currentStep = document.querySelector(`#${stepId}`);
+  const nextStep = document.querySelector(`[data-step="${stepId}"] + .form-step`);
+// [data-step="${stepId}"] to zapis szablonu dla selektora atrybutu. To oznacza, że wyszukujemy element, który ma atrybut data-step o wartości stepId.
+  // Sprawdź, czy oba kroki istnieją
+  if (currentStep && nextStep) {
+    // Ukryj aktualny krok i pokaż następny krok
+    currentStep.style.display = 'none';
+    nextStep.style.display = 'block';
+  }
+}
+
+// Funkcja cofania się do poprzedniego kroku
+function prevStep(stepId) {
+  // Pobierz aktualny krok i poprzedni krok na podstawie identyfikatora
+  const currentStep = document.querySelector(`#${stepId}`);
+  const prevStep = document.querySelector(`[data-step="${stepId}"] ~ .form-step`);
+
+  // Sprawdź, czy oba kroki istnieją
+  if (currentStep && prevStep) {
+    // Ukryj aktualny krok i pokaż poprzedni krok
+    currentStep.style.display = 'none';
+    prevStep.style.display = 'block';
+  }
+}
+
+// Obsługa przycisków "Dalej"
+nextButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Pobierz identyfikator kroku z atrybutu onclick przycisku
+    const stepId = button.getAttribute('onclick').split("'")[1];
+    // Wywołaj funkcję nextStep z odpowiednim identyfikatorem kroku
+    nextStep(stepId);
+  });
+});
+
+// Obsługa przycisków "Wstecz"
+prevButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Pobierz identyfikator kroku z atrybutu onclick przycisku
+    const stepId = button.getAttribute('onclick').split("'")[1];
+    // Wywołaj funkcję prevStep z odpowiednim identyfikatorem kroku
+    prevStep(stepId);
+  });
+});
+
+
+  // Funkcja przechodzenia do następnego kroku
+
+
     class Help {
         constructor($el) {
             this.$el = $el;
@@ -344,5 +407,5 @@ document.addEventListener("DOMContentLoaded", function() {
         submit(e) {
             e.preventDefault();
         }
-    }
+}
 });

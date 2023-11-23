@@ -9,8 +9,24 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from leave_it.forms import UserRegistrationForm, LoginForm, PasswordResetForm
 
 from django.http import JsonResponse
-from .models import Institution, Category
+from .models import Institution, Category, Donation
+
+from django.db.models import Sum
 # from leave_it.backend import CustomEmailAuthBackend
+
+class LandingPageView(View):
+    def get(self, request):
+        bags_count = Donation.objects.aggregate(total_bags=Sum('quantity'))['total_bags'] # oblicza sumę pola quantity w modelu Donation i zwraca wynik jako wartość przypisaną do klucza total_bags w słowniku,
+        # a następnie pobiera ten wynik za pomocą ['total_bags'].
+
+        supported_organizations_count = Institution.objects.count() # count() zwraca liczbę wszystkich obiektów w modelu
+
+        context = {
+            'bags_count': bags_count if bags_count else 0,
+            'supported_organizations_count': supported_organizations_count if supported_organizations_count else 0,
+        }
+        return render(request, 'index.html', context)
+
 
 class GetInstitutionsView(View):
     def get(self, request):
@@ -32,14 +48,10 @@ class GetInstitutionsView(View):
         return JsonResponse(data, safe=False)
 
 
-class LandingPageView(View):
+class AddDonationView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'index.html')
-
-class AddDonationView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    permission_required = 'leave_it.add_donation'
-    def get(self, request):
-        return render(request, 'form.html')
+        categories = Category.objects.all()  # pobierz kategorie w tej metodzie
+        return render(request, 'form.html', {'categories': categories})
 
 # Z FORMULARZA
 class LoginView(View):
@@ -190,3 +202,8 @@ class ResetPasswordView(View):
         # W przypadku nieprawidłowych danych
         messages.error(request, 'Wystąpił błąd podczas resetowania hasła.')
         return render(request, "reset_password-form.html", {'form': form})
+
+
+class FormView(View):
+    def get(self, request):
+         return render(request, 'form.html')

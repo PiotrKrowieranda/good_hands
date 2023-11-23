@@ -15,8 +15,19 @@
       <header class="header--main-page">
         <nav class="container container--70">
           <ul class="nav--actions">
-            <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
-            <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+            {% if request.user.is_anonymous %}
+              <li><a href="{% url 'login' %}" class="btn btn--small btn--without-border">Zaloguj</a></li>
+              <li><a href="{% url 'register' %}" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+            {% else %}
+                <div class="user-menu">
+                  <h1 class="user-dropdown-trigger" > Witaj {{ request.user.email }}</h1>
+                  <ul class="user-dropdown">
+                    <li><a href="{% url 'profile' %}" class="btn btn--without-border" >Profil</a></li>
+                    <li><a href="{% url 'logout' %}" class="btn btn--without-border" >Wyloguj</a></li>
+                    <li><a href="{% url 'reset' %}" class="btn btn--without-border" >Zmień hasło</a></li>
+                  </ul>
+                </div>
+            {% endif %}
           </ul>
 
           <ul>
@@ -67,27 +78,32 @@
           <a href="#" class="btn btn--small"><img src="{% static 'images/icon-facebook.svg' %}"/></a>
           <a href="#" class="btn btn--small"><img src="{% static 'images/icon-instagram.svg' %}"/></a>
             <br>
+                <div class="user-menu">
             {% if request.user.is_anonymous %}
-                <a class="tooltip" data-text="aby korzystać z aplikacji" href="{% url 'login' %}">zaloguj aby korzystać z aplikacji</a>
-                <br>
-                <a class="tooltip" data-text="jeśli nie masz konta" href="{% url 'register' %}">zarejestuj się jeśli nie masz konta</a>
+                 <ul class="user-dropdown0">
+                     <li><a class="tooltip" data-text="aby korzystać z aplikacji" href="{% url 'login' %}">zaloguj aby korzystać z aplikacji</a></li>
+                     <li><a class="tooltip" data-text="jeśli nie masz konta" href="{% url 'register' %}">zarejestuj się jeśli nie masz konta</a></li>
+                 </ul>
             {% else %}
-                <p>Nazwa zalogowanego użytkownika: {{ request.user.email }}</p>
+                <span>Witaj {{ request.user.email }}</span>
+                <ul class="user-dropdown">
+                    <li><a href="{% url 'profile' %}">Profil</a></li>
+                    <li><a href="{% url 'logout' %}">Wyloguj</a></li>
+                    <li><a href="{% url 'reset' %}">zmień hasło</a></li>
+                </ul>
+                </div>
 
-                <a href="{% url 'logout' %}">wyloguj</a>
-                <br>
-                <a href="{% url 'reset' %}">zmień hasło</a>
             {% endif %}
 
         </div>
       </div>
 
     {% endblock %}
-</footer>
+    </footer>
 
 
-<script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 
-</body>
-</html>
+    </body>
+    </html>
 
