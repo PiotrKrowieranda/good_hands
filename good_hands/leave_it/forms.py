@@ -1,8 +1,6 @@
 from django import forms
 from .models import CustomUser
 
-from django import forms
-from .models import CustomUser
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -20,7 +18,7 @@ class UserRegistrationForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
-            raise forms.ValidationError("Email jest już zajęty.")
+            self.add_error('email', "Email jest już zajęty.")
         return email
 
     def clean(self):
@@ -29,9 +27,9 @@ class UserRegistrationForm(forms.ModelForm):
         password_confirm = cleaned_data.get('password_confirm')
 
         if password != password_confirm:
-            raise forms.ValidationError("Hasła nie są identyczne.")
+            self.add_error('password', "hasła nie są identyczne")
         if not password or not password_confirm:
-            raise forms.ValidationError("Pola z hasłem są wymagane.")
+            self.add_error('password',"Pola z hasłem są wymagane.")
 
     def save(self):
         user = super().save()

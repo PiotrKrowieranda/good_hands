@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Znajdź wszystkie przyciski "Dalej" z klasą .btn i .next-step
-const nextButtons = document.querySelectorAll('.btn.next-step');
+const nextButtons = document.querySelectorAll('.btn next-step');
 
 // Znajdź wszystkie przyciski "Wstecz" z klasą .btn i .prev-step
-const prevButtons = document.querySelectorAll('.btn.prev-step');
+const prevButtons = document.querySelectorAll('.btn prev-step');
 
 // Funkcja przechodzenia do następnego kroku
 function nextStep(stepId) {

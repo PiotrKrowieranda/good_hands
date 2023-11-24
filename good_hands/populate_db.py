@@ -14,14 +14,14 @@ inst1 = Institution.objects.create(
     description="Cel i misja: Pomoc dla potrzebujących.",
     type="jedzenie, ubrania"
 )
-inst1.categories.set([fundacja_category])
+inst1.categories.add(fundacja_category)
 
 inst2 = Institution.objects.create(
     name="Organizacja 'Lorem Ipsum 2'",
     description="Cel i misja: Pomoc dla osób chorych.",
     type="jedzenie, ubrania",
 )
-inst2.categories.set([organizacja_category])
+inst2.categories.add(organizacja_category)
 
 inst3 = Institution.objects.create(
     name="Zbiórka 'Lorem Ipsum 3'",

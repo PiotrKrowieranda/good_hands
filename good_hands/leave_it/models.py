@@ -2,16 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.models import User
 from django.conf import settings
-import logging
+
 
 # Manager niestandardowego użytkownika
 class UserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
-        # Tworzenie użytkownika z polem 'email' jako unikalnym identyfikatorem
         if not email:
             raise ValueError("Email musi być ustawiony.")
-        print(f"Tworzenie użytkownika: {email}")
-        print(f"Hasło: {password}")
+
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -22,13 +20,11 @@ class UserManager(BaseUserManager):
 class CustomUser(AbstractUser):
 
     username = None
-    # Dodaj pole 'email' jako unikalny identyfikator
+
     email = models.EmailField(unique=True)
 
-    # Ustaw niestandardowy manager
     objects = UserManager()
 
-    # Ustaw 'email' jako pole identyfikujące użytkownika
     USERNAME_FIELD = 'email'
 
     REQUIRED_FIELDS = []
@@ -70,11 +66,12 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
-    #Odniesienie do settings.AUTH_USER_MODEL oznacza używanie niestandardowego modelu użytkownika,
-    #który jest zdefiniowany w ustawieniach Django. W standardowym modelu użytkownika Django, model ten jest zazwyczaj ustawiany na auth.User.
+
+    # Referring to settings.AUTH_USER_MODEL means using a custom user model,
+    # which is defined in Django settings. In the standard Django user model, this model is typically set to auth.User.
 
     def __str__(self):
-        return f'Donation #{self.id} - {self.quantity} bags'  # Reprezentacja obiektu jako ciąg znaków
+        return f'Donation #{self.id} - {self.quantity} bags'
 
 
 

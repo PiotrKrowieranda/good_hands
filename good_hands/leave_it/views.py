@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from .models import CustomUser
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from leave_it.forms import UserRegistrationForm, LoginForm, PasswordResetForm
 
@@ -12,14 +12,12 @@ from django.http import JsonResponse
 from .models import Institution, Category, Donation
 
 from django.db.models import Sum
-# from leave_it.backend import CustomEmailAuthBackend
+
 
 class LandingPageView(View):
     def get(self, request):
-        bags_count = Donation.objects.aggregate(total_bags=Sum('quantity'))['total_bags'] # oblicza sumę pola quantity w modelu Donation i zwraca wynik jako wartość przypisaną do klucza total_bags w słowniku,
-        # a następnie pobiera ten wynik za pomocą ['total_bags'].
-
-        supported_organizations_count = Institution.objects.count() # count() zwraca liczbę wszystkich obiektów w modelu
+        bags_count = Donation.objects.aggregate(total_bags=Sum('quantity'))['total_bags']
+        supported_organizations_count = Institution.objects.count()
 
         context = {
             'bags_count': bags_count if bags_count else 0,
@@ -53,7 +51,7 @@ class AddDonationView(LoginRequiredMixin, View):
         categories = Category.objects.all()  # pobierz kategorie w tej metodzie
         return render(request, 'form.html', {'categories': categories})
 
-# Z FORMULARZA
+
 class LoginView(View):
     def get(self, request):
         form = LoginForm()
@@ -65,7 +63,6 @@ class LoginView(View):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
-            print(user)
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Użytkownik został pomyślnie zalogowany')
@@ -147,7 +144,7 @@ class LogoutView(View):
 #             messages.error(request, f'Wystąpił błąd podczas rejestracji: {e}')
 #             return render(request, 'register.html')
 
-# Z FORMULARZA
+
 class RegisterView(View):
     def get(self, request):
         form = UserRegistrationForm()
@@ -186,7 +183,7 @@ class RegisterView(View):
 #         # Przekieruj na stronę indeksu lub inną
 #         return redirect('login')
 
-# z formularza
+
 class ResetPasswordView(View):
     def get(self, request):
         form = PasswordResetForm()
